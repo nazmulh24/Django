@@ -10,9 +10,14 @@
     <link rel="stylesheet" href="{% static "css/style.css" %}">
 </head>
 <body>
-   <h2 class="lal-bg"> HOME </h2>
-   <p>This is home view...</p>
-   <img src="{% static "images/test_nature.jpg" %}" alt="Nature image" class="custom-img">
+    {% comment %} 
+        <h2 class="lal-bg"> HOME </h2>
+        <p>This is home view...</p>
+        <img src="{% static "images/test_nature.jpg" %}" alt="Nature image" class="custom-img"> 
+    {% endcomment %}
+
+   {{name}}
+   <p class="lal-bg">{{age}}</p>
    
 </body>
 </html>
