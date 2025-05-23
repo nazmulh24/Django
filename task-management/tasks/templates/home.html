@@ -16,9 +16,19 @@
         <img src="{% static "images/test_nature.jpg" %}" alt="Nature image" class="custom-img"> 
     {% endcomment %}
 
-   {{name}}
-   <p class="lal-bg">{{age}}</p>
-   
+    <p>{{name}}</p>
+
+    {% with total=name|length %} 
+        {{total}}
+    {% endwith %}
+
+    {% for nam in name %}
+        {% if not nam == "Nazmul" %}
+            <p>{{nam}}</p>
+        {% endif %}
+    {% endfor %}
+
+    <p class="lal-bg">{{age}}</p>
 </body>
 </html>
 
