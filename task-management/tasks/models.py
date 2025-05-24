@@ -20,7 +20,25 @@ class Task(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
-# -----> Relations :
+# -----> Relations : a)--> One-to-One   ||  b)--> Many-to-One   ||  c)--> Many-to-Many
+
 # --> One-to-One
+class TaskDetail(models.Model):
+    HIGH = "H"
+    MEDIUM = "M"
+    LOW = "L"
+
+    PRIORITY_OPTIONS = (
+        (HIGH, "High"),
+        (MEDIUM, "Medium"),
+        (LOW, "Low"),
+    )
+    
+    task = models.OneToOneField(Task, on_delete=models.CASCADE) # --> One-to-One
+
+    assign_to = models.CharField(max_length=100)
+    priority = models.CharField(max_length=1, choices=PRIORITY_OPTIONS, default=LOW)
+
+
 # --> Many-to-One
 # --> Many-to-Many
