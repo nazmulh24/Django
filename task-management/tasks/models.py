@@ -22,6 +22,7 @@ class Task(models.Model):
 
 # -----> Relations : a)--> One-to-One   ||  b)--> Many-to-One   ||  c)--> Many-to-Many
 
+
 # --> One-to-One
 class TaskDetail(models.Model):
     HIGH = "H"
@@ -33,11 +34,21 @@ class TaskDetail(models.Model):
         (MEDIUM, "Medium"),
         (LOW, "Low"),
     )
-    
-    task = models.OneToOneField(Task, on_delete=models.CASCADE) # --> One-to-One
+
+    task = models.OneToOneField(Task, on_delete=models.CASCADE)  # --> One-to-One
 
     assign_to = models.CharField(max_length=100)
     priority = models.CharField(max_length=1, choices=PRIORITY_OPTIONS, default=LOW)
+
+    """ 
+    --> Task.objects.get(id=1)
+    
+    select *
+    from Task
+    where id = 1;
+    
+    ----- ORM -----
+    """
 
 
 # --> Many-to-One
