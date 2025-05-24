@@ -1,17 +1,33 @@
 from django.db import models
 
-
 # ---> Create your models here.
-# class Example(models.Model):
-#     name = models.CharField(max_length=100)
-#     description = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
+""" 
+class Example(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
-#     def __str__(self):
-#         return self.name
+    def __str__(self):
+        return self.name
+"""
 
 
 class Task(models.Model):
+    # --> Error skip korar jonno project k comment kore dilam
+    # project = models.ForeignKey(
+    #     "Project",
+    #     on_delete=models.CASCADE,
+    #     null=True,
+    #     blank=True,
+    # )  # ------------------------> Many-to-One
+
+    # --> then shell a kaj korar por...
+    project = models.ForeignKey(
+        "Project",
+        on_delete=models.CASCADE,
+        default=1,
+    )  # -------------------------> Many-to-One
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     due_date = models.DateField()
@@ -52,4 +68,9 @@ class TaskDetail(models.Model):
 
 
 # --> Many-to-One
+class Project(models.Model):
+    name = models.CharField(max_length=100)
+    start_date = models.DateField()
+
+
 # --> Many-to-Many
