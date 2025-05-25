@@ -6,6 +6,12 @@
     <title>Task_form</title>
 </head>
 <body>
+    <div>
+        {% if message %}
+            <p>{{message}}</p>
+        {% endif %}
+    </div>
+
     <form method="POST"> 
         {% csrf_token %}
         {{form.as_p}} <!-- views.py er moddhe context a __ "form": form -->
