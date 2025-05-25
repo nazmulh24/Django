@@ -6,17 +6,9 @@
     <title>Task_form</title>
 </head>
 <body>
-    <!-- 
-    <form method="GET"> default method is GET 
-    -->
     <form method="POST"> 
-        {% csrf_token %} <!-- To use POST -->
-        <label for="">Title</label>
-        <input type="text" name="title">
-
-        <label for="">Number</label>
-        <input type="text" name="number">
-
+        {% csrf_token %}
+        {{form.as_p}} <!-- views.py er moddhe context a __ "form": form -->
         <button type="submit">Submit</button>
     </form>
 </body>
