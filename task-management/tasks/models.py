@@ -1,94 +1,76 @@
 from django.db import models
 
-# ---> Create your models here.
-""" 
-class Example(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-"""
-
 
 class Task(models.Model):
-
-    # --> Error skip korar jonno project k comment kore dilam
-    """project = models.ForeignKey(
-        "Project",
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-    )"""  # ----------------------------------> Many-to-One
-    # --> then,,, shell a kaj korar por...
+    STATUS_OPTIONS = (
+        ("PENDING", "Pending"),
+        ("IN_PROGRESS", "In progress"),
+        ("COMPLETED", "Completed"),
+    )
     project = models.ForeignKey(
         "Project",
         on_delete=models.CASCADE,
         default=1,
-    )  # -------------------------------------> Many-to-One
-
-    assigned_to = models.ManyToManyField("Employee")  # ----> Many-to-Many
-
+    )
+    assigned_to = models.ManyToManyField("Employee")
     title = models.CharField(max_length=200)
     description = models.TextField()
     due_date = models.DateField()
+    status = models.CharField(max_length=15, choices=STATUS_OPTIONS, default="PENDING")
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    # taskdetail_set
-    # taskdetail ---> One-to-One
-    # taskdetail --> details ||--> It will change...
+
+    def __str__(self):
+        return self.title
 
 
-# -----> Relations : a)--> One-to-One   ||  b)--> Many-to-One   ||  c)--> Many-to-Many
-
-
-# --> One-to-One
 class TaskDetail(models.Model):
     HIGH = "H"
     MEDIUM = "M"
     LOW = "L"
-
     PRIORITY_OPTIONS = (
         (HIGH, "High"),
         (MEDIUM, "Medium"),
         (LOW, "Low"),
     )
-
+    # std_id = models.CharField(max_length=200, primary_key=True)
     task = models.OneToOneField(
         Task,
         on_delete=models.CASCADE,
-        related_name="details",  # This will change the reverse relation name (line-41)
-    )  # --> One-to-One
-
+        related_name="details",
+    )
     assign_to = models.CharField(max_length=100)
     priority = models.CharField(max_length=1, choices=PRIORITY_OPTIONS, default=LOW)
+    notes = models.TextField(blank=True, null=True)  # --> Optional Field
 
-    """ 
-    --> Task.objects.get(id=1)
-    
-    select *
-    from Task
-    where id = 1;
-    
-    ----- ORM -----
-    """
+    def __str__(self):
+        return f"Details form Task {self.task.title}"
 
 
-# --> Many-to-One
 class Project(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)  # --> Optional Field
     start_date = models.DateField()
-
-
-# --> Many-to-Many
-class Employee(models.Model):
-    name = models.CharField(max_length=50)
-    email = models.EmailField(unique=True, max_length=254)
-    # task_set
 
     def __str__(self):
         return self.name
 
 
+class Employee(models.Model):
+    name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True, max_length=254)
+
+    def __str__(self):
+        return self.name
+
+
+"""
+7.2 Reset Database in Django
+
+run command --> after delete all file except __init__.py  in migrations folder 
+i. ---> python manage.py makemigrations
+ii. --> python manage.py migrate
+
+Now you have fress database with all models and migrations applied.
+"""
