@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django import forms
 from tasks.models import Task
 
@@ -29,35 +30,81 @@ class TaskForm(forms.Form):
         self.fields["assigned_to"].choices = [(emp.id, emp.name) for emp in employees]
 
 
+class StyleFormMixin:
+    default_classes = (
+        "border-2 border-gray-300 p-2 rounded-lg shadow-sm focus:border-green-400 w-full"
+    )
+
+    def apply_style_widgets(self):
+        for field_name, field in self.fields.items():
+            if isinstance(field.widget, forms.TextInput):
+                field.widget.attrs.update(
+                    {
+                        "class": self.default_classes,
+                        "placeholder": f"Enter {field.label.lower()}...",
+                    }
+                )
+            elif isinstance(field.widget, forms.Textarea):
+                field.widget.attrs.update(
+                    {
+                        "class": self.default_classes,
+                        "placeholder": f"Enter {field.label.lower()}...",
+                        "rows": 4,
+                    }
+                )
+            elif isinstance(field.widget, forms.SelectDateWidget):
+                field.widget.attrs.update(
+                    {
+                        "class": self.default_classes,
+                    }
+                )
+            elif isinstance(field.widget, forms.CheckboxSelectMultiple):
+                field.widget.attrs.update(
+                    {
+                        # "class": "flex flex-col gap-2",
+                        "class": "space-y-2",
+                    }
+                )
+
+
 # --> Django Model Form
-class TaskModelForm(forms.ModelForm):
+class TaskModelForm(StyleFormMixin, forms.ModelForm):
+
     class Meta:
         model = Task
         # fields = "__all__"
         fields = ["title", "description", "due_date", "assigned_to"]
         # exclude = ["project", "is_completed", "created_at", "updated_at"]
 
-        widgets = {
-            "title": forms.TextInput(
-                attrs={
-                    "placeholder": "Enter task title ...",
-                    "class": "border-2 border-gray-300 w-full rounded-lg shadow-sm focus:border-green-400",
-                }
-            ),
-            "description": forms.Textarea(
-                attrs={
-                    "placeholder": "Describe the task ...",
-                    "class": "border-2 border-gray-300 w-full rounded-lg shadow-sm focus:border-green-400",
-                }
-            ),
-            "due_date": forms.SelectDateWidget(
-                attrs={
-                    "class": "border-2 border-gray-300 rounded-lg shadow-sm focus:border-green-400",
-                }
-            ),
-            "assigned_to": forms.CheckboxSelectMultiple(
-                attrs={
-                    "class": "border-2 border-gray-300 rounded-lg shadow-sm focus:border-green-400",
-                }
-            ),
-        }
+        """Manual Widget"""
+        # widgets = {
+        #     "title": forms.TextInput(
+        #         attrs={
+        #             "placeholder": "Enter task title ...",
+        #             "class": "w-full border-2 border-gray-300 p-2 rounded-lg shadow-sm focus:border-green-400",
+        #         }
+        #     ),
+        #     "description": forms.Textarea(
+        #         attrs={
+        #             "placeholder": "Describe the task ...",
+        #             "class": "w-full border-2 border-gray-300 p-2 rounded-lg shadow-sm focus:border-green-400",
+        #         }
+        #     ),
+        # due_date = forms.DateField(
+        #     widget=forms.SelectDateWidget(
+        #         attrs={
+        #             "class": "border-2 border-gray-300 p-2 rounded-lg shadow-sm focus:border-green-400",
+        #         }
+        #     ),
+        # )
+        #     "assigned_to": forms.CheckboxSelectMultiple(
+        #         attrs={
+        #             "class": "space-y-2",
+        #         }
+        #     ),
+        # }
+
+    """Mixin Widget"""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_style_widgets()
