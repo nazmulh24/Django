@@ -1,21 +1,29 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task_form</title>
+
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
 </head>
 <body>
-    <div>
-        {% if message %}
-            <p>{{message}}</p>
-        {% endif %}
-    </div>
+    <div class = "w-1/2 mx-auto mt-8">
+        <div>
+            {% if message %}
+                <p>{{message}}</p>
+            {% endif %}
+        </div>
+    
+        <form method="POST"> 
+            {% comment %} <input type="text" class = "border-2 border-gray-300 w-full rounded-lg shadow-sm focus:border-green-400"> {% endcomment %}
 
-    <form method="POST"> 
-        {% csrf_token %}
-        {{form.as_p}} <!-- views.py er moddhe context a __ "form": form -->
-        <button type="submit">Submit</button>
-    </form>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="text-white bg-red-500 mt-3 p-2 rounded-lg">Submit</button>
+        </form>
+    </div>
 </body>
 </html>
