@@ -38,6 +38,26 @@ class TaskModelForm(forms.ModelForm):
         # exclude = ["project", "is_completed", "created_at", "updated_at"]
 
         widgets = {
-            "due_date": forms.SelectDateWidget,
-            "assigned_to": forms.CheckboxSelectMultiple,
+            "title": forms.TextInput(
+                attrs={
+                    "placeholder": "Enter task title ...",
+                    "class": "border-2 border-gray-300 w-full rounded-lg shadow-sm focus:border-green-400",
+                }
+            ),
+            "description": forms.Textarea(
+                attrs={
+                    "placeholder": "Describe the task ...",
+                    "class": "border-2 border-gray-300 w-full rounded-lg shadow-sm focus:border-green-400",
+                }
+            ),
+            "due_date": forms.SelectDateWidget(
+                attrs={
+                    "class": "border-2 border-gray-300 rounded-lg shadow-sm focus:border-green-400",
+                }
+            ),
+            "assigned_to": forms.CheckboxSelectMultiple(
+                attrs={
+                    "class": "border-2 border-gray-300 rounded-lg shadow-sm focus:border-green-400",
+                }
+            ),
         }
