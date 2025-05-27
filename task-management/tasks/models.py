@@ -34,13 +34,12 @@ class TaskDetail(models.Model):
         (MEDIUM, "Medium"),
         (LOW, "Low"),
     )
-    # std_id = models.CharField(max_length=200, primary_key=True)
     task = models.OneToOneField(
         Task,
         on_delete=models.CASCADE,
         related_name="details",
     )
-    assign_to = models.CharField(max_length=100)
+    assigned_to = models.CharField(max_length=100)
     priority = models.CharField(max_length=1, choices=PRIORITY_OPTIONS, default=LOW)
     notes = models.TextField(blank=True, null=True)  # --> Optional Field
 
@@ -63,14 +62,3 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.name
-
-
-"""
-7.2 Reset Database in Django
-
-run command --> after delete all file except __init__.py  in migrations folder 
-i. ---> python manage.py makemigrations
-ii. --> python manage.py migrate
-
-Now you have fress database with all models and migrations applied.
-"""
