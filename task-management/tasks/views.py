@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from tasks.forms import TaskForm, TaskModelForm
 from tasks.models import Employee, Task, TaskDetail, Project
 from datetime import date
-from django.db.models import Q
+from django.db.models import Q, Count, Max, Min, Sum, Avg
 
 
 # --> Create your views here.
@@ -47,19 +47,9 @@ def create_task(request):
 
 
 def view_task(request):
-    """select_related(OneToOneField, ForeignKey) --> for single object"""
+    # task_cnt = Task.objects.aggregate(num_task=Count("id"))
 
-    # tasks = Task.objects.all() # --> N+1 Query Problem
-    # tasks = Task.objects.select_related("details").all()  # --> Optimized Query
-    # tasks = TaskDetail.objects.select_related("task").all()  # --> TaskDetail
+    # task_cnt = Project.objects.annotate(num_task=Count("task"))
+    task_cnt = Project.objects.annotate(num_task=Count("task")).order_by("num_task")
 
-    # tasks = Task.objects.select_related("project").all()
-
-    """prefetch_related(Reverse_ForeignKey, ManyToManyField) --> for multiple objects"""
-
-    # tasks = Project.objects.prefetch_related("task_set").all()
-    
-    # tasks = Task.objects.prefetch_related("assigned_to").all()
-    tasks = Employee.objects.prefetch_related("task_set").all()
-
-    return render(request, "show_task.html", {"tasks": tasks})
+    return render(request, "show_task.html", {"task_cnt": task_cnt})

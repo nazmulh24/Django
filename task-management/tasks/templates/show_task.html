@@ -7,42 +7,11 @@
 </head>
 <body>
     <div>
+        {% comment %} <p>{{ task_cnt }}</p> {% endcomment %}
+
         <ol>
-            
-            <!--
-            {% for task in tasks %}
-                {% comment %} select_related {% endcomment %}
-                {% comment %} <li>{{ task.title }} ------- {{ task.details.priority }}</li>  {% endcomment %}
-                <li>{{ task.task.title }} ------- {{ task.priority }}</li>
-            {% endfor %}
-            -->
-            
-            <!--
-            {% for project in tasks %}
-                {% comment %} prefetch_related {% endcomment %}
-                <li>{{ project.name }} ------- 
-                    {% for task in project.task_set.all %}
-                        {{ task.title }}
-                    {% endfor %}</li>
-            {% endfor %}
-            -->
-
-            <!--
-            {% for task in tasks %}
-                {% comment %} prefetch_related {% endcomment %}
-                <li>{{ task.title }} ------- 
-                    {% for emp in task.assigned_to.all %}
-                        {{ emp.name }}
-                    {% endfor %}</li>
-            {% endfor %}
-            -->
-
-            {% for emp in tasks %}
-                {% comment %} prefetch_related {% endcomment %}
-                <li>{{ emp.name }} ------- 
-                    {% for task in emp.task_set.all %}
-                        {{ task.title }}
-                    {% endfor %}</li>
+            {% for project in task_cnt %}
+                <li>{{project.name}} ----------- {{project.num_task}}</li>
             {% endfor %}
         </ol>
     </div>
