@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from tasks.forms import TaskForm, TaskModelForm
 from tasks.models import Employee, Task, TaskDetail, Project
 from datetime import date
+from django.db.models import Q
 
 
 # --> Create your views here.
@@ -46,17 +47,13 @@ def create_task(request):
 
 
 def view_task(request):
-    tasks = Task.objects.filter(status="PENDING")
+    # --> Show the task that contain "word" in title
+    # tasks = Task.objects.filter(
+    #     title__icontains="c", status="PENDING"
+    # )  # ---> and operator (,)
 
-    # --> show tasks with due date today
-    tasks2 = Task.objects.filter(due_date=date.today())
+    tasks = Task.objects.filter(
+        Q(status="PENDING") | Q(status="IN_PROGRESS")
+    )  # ---> or operator ( Q arrr | )
 
-    # --> show tasks which priority is not LOW
-    tasks3 = TaskDetail.objects.exclude(priority="L")
-
-    context = {
-        "tasks": tasks,
-        "tasks2": tasks2,
-        "tasks3": tasks3,
-    }
-    return render(request, "show_task.html", context)
+    return render(request, "show_task.html", {"tasks": tasks})
