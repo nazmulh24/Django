@@ -20,26 +20,30 @@
 
     <!-- Task Items -->
     <div class="divide-y divide-gray-100 mb-10">
-      <!-- Task Item 1 -->
-      <div class="grid grid-cols-4 p-5 gap-4 items-center">
+      {% for task in tasks %}
+        <!-- Task Item 1 -->
+        <div class="grid grid-cols-4 p-5 gap-4 items-center">
         <div class="flex items-center gap-2 ps-1">
           <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-          <div><span>Test Low Task</span></div>
+          <div><span>{{task.title}}</span></div>
         </div>
         <div>
           <span
             class="px-3 py-1 rounded-full bg-blue-200 text-blue-600 text-sm"
           >
-            Low
+            {{task.details.get_priority_display}} <!-- get_foo_display -->
           </span>
         </div>
         <div>
           <div class="flex -space-x-2">
+            {% for emp in task.assigned_to.all %}
             <div
-              class="w-8 h-8 rounded-full bg-blue-500 text-white flex justify-center items-center text-sm border-2 border-white"
-            >
-              CA
-            </div>
+            class="w-8 h-8 rounded-full bg-blue-500 text-white flex justify-center items-center text-sm border-2 border-white"
+          >
+            {{emp.name|slice:":2"|upper}}
+          </div>
+            {% endfor %}
+
             <div
               class="w-8 h-8 rounded-full bg-green-500 text-white flex justify-center items-center text-sm border-2 border-white"
             >
@@ -53,9 +57,11 @@
           </div>
         </div>
         <div>
-          <span class="text-gray-500">9 monts ago...</span>
+          <span class="text-gray-500">{{task.created_at|timesince}}</span>
         </div>
-      </div>
+        </div>
+      {% endfor %}
+
       <!-- Task Item 2 -->
       <div class="grid grid-cols-4 p-5 gap-4 items-center">
         <div class="flex items-center gap-2 ps-1">

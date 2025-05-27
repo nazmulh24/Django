@@ -18,7 +18,21 @@ def home_view(request):
 
 
 def manager_dashboard(request):
-    return render(request, "Dashboard/manager-dashboard.html")
+    tasks = Task.objects.all()
+
+    total_task = tasks.count()  # --> Total Task
+    completed_task = Task.objects.filter(status="COMPLETED").count()  # --> Completed Task
+    in_progress_task = Task.objects.filter(status="IN_PROGRESS").count()  # --> In Progress Task
+    pending_task = Task.objects.filter(status="PENDING").count()  # --> Pending Task
+
+    context = {
+        "tasks": tasks,
+        "total_task": total_task,
+        "completed_task": completed_task,
+        "in_progress_task": in_progress_task,
+        "pending_task": pending_task,
+    }
+    return render(request, "Dashboard/manager-dashboard.html", context)
 
 
 def user_dashboard(request):
