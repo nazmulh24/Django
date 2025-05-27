@@ -8,8 +8,41 @@
 <body>
     <div>
         <ol>
+            
+            <!--
             {% for task in tasks %}
-                <li>{{ task.title }}</li>
+                {% comment %} select_related {% endcomment %}
+                {% comment %} <li>{{ task.title }} ------- {{ task.details.priority }}</li>  {% endcomment %}
+                <li>{{ task.task.title }} ------- {{ task.priority }}</li>
+            {% endfor %}
+            -->
+            
+            <!--
+            {% for project in tasks %}
+                {% comment %} prefetch_related {% endcomment %}
+                <li>{{ project.name }} ------- 
+                    {% for task in project.task_set.all %}
+                        {{ task.title }}
+                    {% endfor %}</li>
+            {% endfor %}
+            -->
+
+            <!--
+            {% for task in tasks %}
+                {% comment %} prefetch_related {% endcomment %}
+                <li>{{ task.title }} ------- 
+                    {% for emp in task.assigned_to.all %}
+                        {{ emp.name }}
+                    {% endfor %}</li>
+            {% endfor %}
+            -->
+
+            {% for emp in tasks %}
+                {% comment %} prefetch_related {% endcomment %}
+                <li>{{ emp.name }} ------- 
+                    {% for task in emp.task_set.all %}
+                        {{ task.title }}
+                    {% endfor %}</li>
             {% endfor %}
         </ol>
     </div>

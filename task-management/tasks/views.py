@@ -47,13 +47,19 @@ def create_task(request):
 
 
 def view_task(request):
-    # --> Show the task that contain "word" in title
-    # tasks = Task.objects.filter(
-    #     title__icontains="c", status="PENDING"
-    # )  # ---> and operator (,)
+    """select_related(OneToOneField, ForeignKey) --> for single object"""
 
-    tasks = Task.objects.filter(
-        Q(status="PENDING") | Q(status="IN_PROGRESS")
-    )  # ---> or operator ( Q arrr | )
+    # tasks = Task.objects.all() # --> N+1 Query Problem
+    # tasks = Task.objects.select_related("details").all()  # --> Optimized Query
+    # tasks = TaskDetail.objects.select_related("task").all()  # --> TaskDetail
+
+    # tasks = Task.objects.select_related("project").all()
+
+    """prefetch_related(Reverse_ForeignKey, ManyToManyField) --> for multiple objects"""
+
+    # tasks = Project.objects.prefetch_related("task_set").all()
+    
+    # tasks = Task.objects.prefetch_related("assigned_to").all()
+    tasks = Employee.objects.prefetch_related("task_set").all()
 
     return render(request, "show_task.html", {"tasks": tasks})
