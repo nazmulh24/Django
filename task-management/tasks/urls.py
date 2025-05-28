@@ -5,6 +5,7 @@ from tasks.views import (
     user_dashboard,
     create_task,
     view_task,
+    update_task,
 )
 
 
@@ -14,4 +15,5 @@ urlpatterns = [
     path("user-dashboard/", user_dashboard),
     path("create-task/", create_task, name="create-task"),
     path("view-task/", view_task),
+    path("update-task/<int:id>/", update_task, name="update-task"),
 ]

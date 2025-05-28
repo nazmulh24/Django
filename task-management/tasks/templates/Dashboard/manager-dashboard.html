@@ -10,20 +10,21 @@
 <!-- Task Table -->
 <div class="bg-white rounded-xl shadow-sm">
     <div
-      class="grid grid-cols-5 p-5 text-sm text-gray-500 border-b border-gray-100"
+      class="grid grid-cols-6 p-5 text-sm text-gray-500 border-b border-gray-100"
     >
       <div>TASK TITLE</div>
       <div>PRIORITY</div>
       <div>STATUS</div>
       <div>TEAM</div>
       <div>CREATED AT</div>
+      <div>MOD</div>
     </div>
 
     <!-- Task Items -->
     <div class="divide-y divide-gray-100 mb-10">
       {% for task in tasks %}
         <!-- Task Item 1 -->
-        <div class="grid grid-cols-5 p-5 gap-4 items-center">
+        <div class="grid grid-cols-6 p-5 gap-4 items-center">
         <div class="flex items-center gap-2 ps-1">
           <div class="w-2 h-2 bg-green-500 rounded-full"></div>
           <div><span>{{task.title}}</span></div>
@@ -62,6 +63,9 @@
         </div>
         <div>
           <span class="text-gray-500">{{task.created_at|timesince}}</span>
+        </div>
+        <div>
+          <a href="{% url "update-task" task.id %}" class="p-2 m-2 border border-black rounded-lg bg-yellow-400">Edit</a>
         </div>
         </div>
       {% endfor %}
