@@ -18,13 +18,9 @@ def home_view(request):
 
 
 def manager_dashboard(request):
-    # tasks = Task.objects.all()
-    tasks = Task.objects.select_related("details").prefetch_related("assigned_to").all()
 
-    # total_task = tasks.count()  # --> Total Task
-    # completed_task = Task.objects.filter(status="COMPLETED").count()  # --> Completed Task
-    # in_progress_task = Task.objects.filter(status="IN_PROGRESS").count()  # --> In Progress Task
-    # pending_task = Task.objects.filter(status="PENDING").count()  # --> Pending Task
+    type = request.GET.get("type", "all")
+    # print(type)
 
     counts = Task.objects.aggregate(
         total_task=Count("id"),
@@ -33,13 +29,20 @@ def manager_dashboard(request):
         pending_task=Count("id", Q(status="PENDING")),
     )
 
+    base_query = Task.objects.select_related("details").prefetch_related("assigned_to")
+
+    if type == "completed":
+        tasks = base_query.filter(status="COMPLETED")
+    elif type == "in_progress":
+        tasks = base_query.filter(status="IN_PROGRESS")
+    elif type == "pending":
+        tasks = base_query.filter(status="PENDING")
+    elif type == "all":
+        tasks = base_query.all()
+
     context = {
         "tasks": tasks,
         "counts": counts,
-        # "total_task": total_task,
-        # "completed_task": completed_task,
-        # "in_progress_task": in_progress_task,
-        # "pending_task": pending_task,
     }
     return render(request, "Dashboard/manager-dashboard.html", context)
 
