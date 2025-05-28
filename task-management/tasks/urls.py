@@ -10,8 +10,8 @@ from tasks.views import (
 
 urlpatterns = [
     path("home/", home_view),
-    path("manager-dashboard/", manager_dashboard, name="mgr-Dashboard"),
+    path("manager-dashboard/", manager_dashboard, name="mgr-dashboard"),
     path("user-dashboard/", user_dashboard),
-    path("create-task/", create_task),
+    path("create-task/", create_task, name="create-task"),
     path("view-task/", view_task),
 ]
