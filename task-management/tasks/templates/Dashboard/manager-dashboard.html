@@ -7,6 +7,14 @@
 
 {% block tasks %}
 
+<div>
+  {% if messages %}
+      {% for msg in messages %}
+          <div class="px-2 py-1 {% if msg.tags == 'success' %}bg-green-500{% endif %}">{{msg}}</div>
+      {% endfor %}
+  {% endif %}
+</div>
+
 <!-- Task Table -->
 <div class="bg-white rounded-xl shadow-sm">
     <div
@@ -66,6 +74,10 @@
         </div>
         <div>
           <a href="{% url "update-task" task.id %}" class="p-2 m-2 border border-black rounded-lg bg-yellow-400">Edit</a>
+          <form action="{% url "delete-task" task.id %}" method="POST">
+          {% csrf_token %}
+            <button type="submit" class="p-2 m-2 border border-black rounded-lg bg-red-400">Delete</button>
+          </form>
         </div>
         </div>
       {% endfor %}

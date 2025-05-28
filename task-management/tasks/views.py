@@ -109,6 +109,19 @@ def update_task(request, id):
     return render(request, "task_form.html", context)
 
 
+def delete_task(request, id):
+    if request.method == "POST":
+        task = Task.objects.get(id=id)
+        task.delete()
+        messages.success(request, "Task deleted successfully!!")
+        return redirect("mgr-dashboard")
+    else:
+        messages.error(
+            request, "Invalid request method. Please use POST to delete a task."
+        )
+        return redirect("mgr-dashboard")
+
+
 def view_task(request):
     # task_cnt = Task.objects.aggregate(num_task=Count("id"))
 
