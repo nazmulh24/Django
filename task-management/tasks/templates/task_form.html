@@ -20,6 +20,8 @@
         </div>
     
         <form method="POST"> 
+            {% comment %} <input type="text" class="border rounded-2 p-2 w-full"> {% endcomment %}
+
             {% csrf_token %}
             {{ task_form }}
             {{ task_detail_form}}
