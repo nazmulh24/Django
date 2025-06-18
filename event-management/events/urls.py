@@ -6,13 +6,17 @@ from events.views import (
     event_view,
     category_view,
     participant_view,
+    cEvent_view,
+    eDetail_view,
 )
 
 
 urlpatterns = [
-    path("home/", home_view),
-    path("dashboard/", dashboard_view),
-    path("event/", event_view),
-    path("category/", category_view),
-    path("participant/", participant_view),
+    path("home/", home_view, name="home"),
+    path("dashboard/", dashboard_view, name="dashboard"),
+    path("event/", event_view, name="event"),
+    path("category/", category_view, name="category"),
+    path("participant/", participant_view, name="participant"),
+    path("create-event/", cEvent_view, name="cEvents"),
+    path("event-details/", eDetail_view, name="eDetails"),
 ]

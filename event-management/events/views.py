@@ -20,3 +20,11 @@ def category_view(request):
 
 def participant_view(request):
     return render(request, "participants.html")
+
+
+def cEvent_view(request):
+    return render(request, "create_events.html")
+
+
+def eDetail_view(request):
+    return render(request, "events_details.html")

@@ -33,24 +33,24 @@
           <div
             class="hidden md:flex items-center space-x-6 text-lg text-gray-700"
           >
-            <a href="./index.html" class="hover:text-orange-600 font-medium"
+            <a href="{% url 'home' %}" class="hover:text-orange-600 font-medium"
               >Home</a
             >
             <a
-              href="./dashboard.html"
+              href="{% url 'dashboard' %}"
               class="hover:text-orange-600 font-medium"
               >Dashboard</a
             >
-            <a href="./events.html" class="hover:text-orange-600 font-medium"
+            <a href="{% url 'event' %}" class="hover:text-orange-600 font-medium"
               >Events</a
             >
             <a
-              href="./categories.html"
+              href="{% url 'category' %}"
               class="hover:text-orange-600 font-medium"
               >Categories</a
             >
             <a
-              href="./perticipants.html"
+              href="{% url 'participant' %}"
               class="hover:text-orange-600 font-medium"
               >Participants</a
             >
@@ -83,15 +83,15 @@
         id="mobile-menu"
         class="md:hidden hidden px-4 pb-4 text-gray-700 text-base space-y-2"
       >
-        <a href="./index.html" class="block hover:text-orange-600">Home</a>
-        <a href="./dashboard.html" class="block hover:text-orange-600"
+        <a href="{% url 'home' %}" class="block hover:text-orange-600">Home</a>
+        <a href="{% url 'dashboard' %}" class="block hover:text-orange-600"
           >Dashboard</a
         >
-        <a href="./events.html" class="block hover:text-orange-600">Events</a>
-        <a href="./categories.html" class="block hover:text-orange-600"
+        <a href="{% url 'event' %}" class="block hover:text-orange-600">Events</a>
+        <a href="{% url 'category' %}" class="block hover:text-orange-600"
           >Categories</a
         >
-        <a href="./perticipants.html" class="block hover:text-orange-600"
+        <a href="{% url 'participant' %}" class="block hover:text-orange-600"
           >Participants</a
         >
         <a href="#" class="block hover:text-orange-600">About us</a>
