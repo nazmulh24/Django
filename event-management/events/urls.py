@@ -1,7 +1,7 @@
-from django.contrib import admin
-from django.urls import include, path
+from django.urls import path
+
 from events.views import (
-    home_view,
+    # home_view,
     create_event,
     join_event,
     dashboard_view,
@@ -23,7 +23,7 @@ from events.views import (
 
 
 urlpatterns = [
-    path("home/", home_view, name="home"),
+    # path("home/", home_view, name="home"),
     path("create-event/", create_event, name="create_event"),
     path("join-event/<int:id>/", join_event, name="join_event"),  # --> Join Event...
     #
