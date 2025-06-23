@@ -3,58 +3,127 @@ from events.models import Event, Participant, Category
 
 
 class StyleFormMixin:
-    default_classes = (
-        "border-2 border-gray-300 p-2 rounded-lg shadow-sm focus:border-green-400"
-    )
+    default_classes = "w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50"
 
-    def apply_style_widgets(self):
+    def apply_styled_widgets(self):
         for field_name, field in self.fields.items():
-            if isinstance(field.widget, forms.TextInput):
-                field.widget.attrs.update(
+            widget = field.widget
+            placeholder = f"Enter {field.label.lower()}" if field.label else ""
+
+            if isinstance(widget, forms.TextInput):
+                widget.attrs.update(
                     {
-                        "class": f"{self.default_classes} w-full",
-                        "placeholder": f"Enter {field.label.lower()}...",
+                        "class": self.default_classes,
+                        "placeholder": placeholder,
                     }
                 )
-            elif isinstance(field.widget, forms.Textarea):
-                field.widget.attrs.update(
+            elif isinstance(widget, forms.EmailInput):
+                widget.attrs.update(
                     {
-                        "class": f"{self.default_classes} w-full bg-gray-50",
-                        "placeholder": f"Enter {field.label.lower()}...",
-                        "rows": 4,
+                        "class": self.default_classes,
+                        "placeholder": "your@email.com",
                     }
                 )
-            elif isinstance(field.widget, forms.Select):
-                field.widget.attrs.update(
+            elif isinstance(widget, forms.Textarea):
+                widget.attrs.update(
                     {
-                        "class": "form-select",
+                        "class": self.default_classes,
+                        "placeholder": placeholder,
+                        "rows": 3,
+                    }
+                )
+            elif isinstance(widget, forms.Select):
+                widget.attrs.update(
+                    {
+                        "class": self.default_classes,
+                    }
+                )
+            elif isinstance(widget, forms.SelectMultiple):
+                widget.attrs.update(
+                    {
+                        "class": self.default_classes,
+                    }
+                )
+            elif isinstance(widget, forms.DateInput):
+                widget.attrs.update(
+                    {
+                        "type": "date",
+                        "class": self.default_classes,
+                    }
+                )
+            elif isinstance(widget, forms.TimeInput):
+                widget.attrs.update(
+                    {
+                        "type": "time",
+                        "class": self.default_classes,
+                    }
+                )
+            else:
+                widget.attrs.update(
+                    {
+                        "class": self.default_classes,
                     }
                 )
 
 
-class EventForm(forms.ModelForm):
+class EventForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Event
-        fields = "__all__"
+        fields = ["name", "description", "date", "time", "location", "category"]
+        widgets = {
+            "date": forms.DateInput(attrs={"type": "date"}),
+            "time": forms.TimeInput(attrs={"type": "time"}),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.apply_style_widgets()
+        self.apply_styled_widgets()
 
 
-class ParticipantForm(forms.ModelForm):
+class ParticipantForm(StyleFormMixin, forms.ModelForm):
+    events = forms.ModelMultipleChoiceField(
+        queryset=Event.objects.all(), required=False, widget=forms.SelectMultiple
+    )
+
     class Meta:
         model = Participant
-        fields = "__all__"
+        fields = ["name", "email", "events"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
+        if self.instance.pk:
+            self.fields["events"].initial = self.instance.events.all()
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        if commit:
+            instance.save()
+            self.save_m2m()
+        return instance
+
+    def save_m2m(self):
+        self.instance.events.set(self.cleaned_data["events"])
+
+
+class JoinEventForm(StyleFormMixin, forms.ModelForm):
+    class Meta:
+        model = Participant
+        fields = ["name", "email"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.apply_styled_widgets()
 
     def clean_email(self):
-        email = self.cleaned_data.get("email")
-        # if Participant.objects.filter(email=email).exists():
-            # raise ValidationError("This email is already registered.")
-        # return email
+        return self.cleaned_data["email"]  # allow existing
 
 
-class CategoryForm(forms.ModelForm):
+class CategoryForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Category
-        fields = "__all__"
+        fields = ["name", "description"]
+
+    def __init__(self, *arg, **kwarg):
+        super().__init__(*arg, **kwarg)
+        self.apply_styled_widgets()
